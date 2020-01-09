@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
-//const Book = require('../models/book')
+const Book = require('../models/book')
 
 // All Authors Route
 router.get('/', async (req, res) => {
@@ -16,7 +16,6 @@ router.get('/', async (req, res) => {
       searchOptions: req.query
     })
   } catch (err) {
-    console.log(err);
     res.redirect('/');
   }
 })
@@ -96,22 +95,6 @@ router.delete('/:id', async (req, res) => {
       res.redirect(`/authors/${author.id}`)
     }
   }
-})
-
-router.get('/:id', (req, res) => {
-  res.send('Show Author ' + req.params.id)
-})
-
-router.get('/:id/edit', (req, res) => {
-  res.send('Edit Author ' + req.params.id)
-})
-
-router.put('/:id', (req, res) => {
-  res.send('Update Author ' + req.params.id)
-})
-
-router.delete('/:id', (req, res) => {
-  res.send('Delete Author ' + req.params.id)
 })
 
 module.exports = router

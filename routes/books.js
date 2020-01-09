@@ -1,7 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const fs = require('fs')
-const path = require('path')
 const Book = require('../models/book')
 const Author = require('../models/author')
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif']
@@ -19,7 +17,7 @@ router.get('/', async (req, res) => {
         query = query.gte('publishDate', req.query.publishedAfter)
     }
     try {
-        const books = await Book.find({})
+        const books = await query.exec()
         res.render('books/index', {
             books: books,
             searchOptions: req.query
@@ -27,7 +25,6 @@ router.get('/', async (req, res) => {
     } catch (error) {
         res.redirect('/')
     }
-
 })
 
 // New Book Route
@@ -37,7 +34,6 @@ router.get('/new', async (req, res) => {
 
 // Create Book Route
 router.post('/', async (req, res) => {
-    const fileName = req.file != null ? req.file.filename : null
     const book = new Book({
         title: req.body.title,
         author: req.body.author,
@@ -52,11 +48,11 @@ router.post('/', async (req, res) => {
         const newBook = await book.save()
         res.redirect('books')
     } catch (error) {
-        renderNewPage(res, book, true, error)
+        renderNewPage(res, book, true)
     }
 })
 
-async function renderNewPage(res, book, hasError = false, error) {
+async function renderNewPage(res, book, hasError = false) {
     try {
         const authors = await Author.find({})
         const params = {
@@ -65,7 +61,6 @@ async function renderNewPage(res, book, hasError = false, error) {
         }
         if (hasError) {
             params.errorMessage = "Error Creating Book"
-            console.log(error)
         }
         res.render('books/new', params)
     } catch (error) {
