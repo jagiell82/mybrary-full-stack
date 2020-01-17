@@ -5,11 +5,12 @@ const Book = require('../models/book')
 router.get('/', async (req, res) => {
     let books
     try {
-        books = await Book.find().sort({ createAt: 'desc' }).limit(10).exec()        
+        //books = await Book.find().sort({ createAt: 'desc' }).limit(10).exec()        
     } catch (error) {
-        books = []
+        //books = []
     }
-    res.render('index', { books: books });
+    //res.render('index', { books: books });
+    res.render('index');
 });
 
 module.exports = router
